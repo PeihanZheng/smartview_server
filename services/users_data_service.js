@@ -103,9 +103,9 @@ module.exports = {
             }
         
             // check for results
-            if (results.length === 0) {
+            if (results.length < 1) {
                 // return the results
-                return callback(null, results);
+                return callback(null, false);
             }
 
             // compare the passwords
@@ -115,11 +115,17 @@ module.exports = {
                 // check for errors
                 if (error) {
                     // error handling
+                    console.error(error);
                     return callback(error);
+                } else if (!passwordMatch) {
+                    // return the results
+                    console.log('passwords do not match');
+                    return callback(null, false);
+                } else {
+                    // return the results
+                    console.log('passwords match');
+                    return callback(null, passwordMatch);
                 }
-
-                // return the results
-                return callback(null, passwordMatch);
             });
         });
     }

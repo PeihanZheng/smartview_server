@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 
 // import routes
 const usersDataRouter = require('./routes/users_data_router');
+const cameraListRouter = require('./routes/camera_list_router');
 
 // configure dotenv
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(express.json());
 
 // use routes
 app.use('/users', usersDataRouter);
+app.use('/cameras', cameraListRouter);
 
 // listen on port
 app.listen(port, () => {

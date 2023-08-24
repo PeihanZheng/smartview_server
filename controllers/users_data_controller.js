@@ -81,6 +81,12 @@ module.exports = {
                     success: 0,
                     message: 'An error occurred while retrieving the user.'
                 });
+            } else if (!results) {
+                // return the results
+                return res.status(400).json({
+                    success: 0,
+                    message: 'User does not exist.'
+                });
             } else {
                 // return the results
                 return res.status(200).json({
@@ -104,6 +110,12 @@ module.exports = {
                 return res.status(500).json({
                     success: 0,
                     message: 'An error occurred while retrieving the user.'
+                });
+            } else if (!results) {
+                // if user does not exist
+                return res.status(400).json({
+                    success: 0,
+                    message: 'User does not exist.'
                 });
             } else {
                 // return the results
@@ -180,7 +192,7 @@ module.exports = {
     },
     // update user password
     updateUserPassword: async (req, res) => {
-        // get the id 
+        // get the id
         const id = req.params.id;
 
         // get the body
@@ -197,7 +209,7 @@ module.exports = {
         }
 
         // verify if the user exists
-        getUserByEmailAddress(email_address, async (error, results) => {
+        getUserByEmailAddress(email_address, (error, results) => {
             // check for errors
             if (error) {
                 // error handling
@@ -215,7 +227,7 @@ module.exports = {
                     });
                 } else {
                     // verify the password
-                    verifyUserPassword(email_address, password, async (error, results) => {
+                    verifyUserPassword(email_address, password, (error, results) => {
                         // check for errors
                         if (error) {
                             // error handling
@@ -229,11 +241,11 @@ module.exports = {
                             if (!results) {
                                 return res.status(400).json({
                                     success: 0,
-                                    message: 'Password is incorrect.'
+                                    message: 'Invalid password.'
                                 });
                             } else {
                                 // hash the new password
-                                bcrypt.hash(new_password, 10, async (error, hash) => {
+                                bcrypt.hash(new_password, 10, (error, hash) => {
                                     // check for errors
                                     if (error) {
                                         // error handling
@@ -243,13 +255,8 @@ module.exports = {
                                             message: 'An error occurred while hashing the password.'
                                         });
                                     } else {
-                                        // replace the password with the hash
-                                        const data = {
-                                            password: hash
-                                        };
-
                                         // update the user
-                                        updateUserById(data, async (error, results) => {
+                                        updateUserById(id, { password: hash }, async (error, results) => {
                                             // check for errors
                                             if (error) {
                                                 // error handling
