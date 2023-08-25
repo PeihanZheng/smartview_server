@@ -1,12 +1,25 @@
-// import modules
+// import pool
 const pool = require('../dao/smartview_dao');
 
 // export the module
 module.exports = {
-    // create new camera
+    // create new alert
     create: (data, callback) => {
-        // create the query
-        pool.query(`INSERT INTO camera_list SET ?`, [data], (error, results, fields) => {
+        // sql query
+        pool.query(`INSERT INTO alerts_list SET ?`, [data], (error, results, fields) => {
+            if (error) {
+                // error handling
+                return callback(error);
+            } else {
+                // return the results
+                return callback(null, results);
+            }
+        })
+    },
+    // get all alerts
+    getAllAlerts: (callback) => {
+        // sql query
+        pool.query(`SELECT * FROM alerts_list`, (error, results, fields) => {
             if (error) {
                 // error handling
                 return callback(error);
@@ -16,23 +29,10 @@ module.exports = {
             }
         });
     },
-    // get all cameras
-    getAllCameras: (callback) => {
+    // get alert by id
+    getAlertById: (id, callback) => {
         // sql query
-        pool.query(`SELECT * FROM camera_list`, (error, results, fields) => {
-            if (error) {
-                // error handling
-                return callback(error);
-            } else {
-                // return the results
-                return callback(null, results);
-            }
-        });
-    },
-    // get camera by id
-    getCameraById: (id, callback) => {
-        // sql query
-        pool.query(`SELECT * FROM camera_list WHERE camera_id = ?`, [id], (error, results, fields) => {
+        pool.query(`SELECT * FROM alerts_list WHERE alert_id = ?`, [id], (error, results, fields) => {
             if (error) {
                 // error handling
                 return callback(error);
@@ -42,24 +42,10 @@ module.exports = {
             }
         });
     },
-    // get camera by user id
-    getCameraByUserId: (id, callback) => {
+    // update alert by id
+    updateAlertById: (id, data, callback) => {
         // sql query
-        pool.query(`SELECT * FROM camera_list WHERE user_id = ?`, [id], (error, results, fields) => {
-            if (error) {
-                // error handling
-                return callback(error);
-            } else {
-                // return the results
-                console.log(results);
-                return callback(null, results);
-            }
-        });
-    },
-    // update camera by id
-    updateCameraById: (id, data, callback) => {
-        // sql query
-        pool.query(`UPDATE camera_list SET ? WHERE camera_id = ?`, [data, id], (error, results, fields) => {
+        pool.query(`UPDATE alerts_list SET ? WHERE alert_id = ?`, [data, id], (error, results, fields) => {
             if (error) {
                 // error handling
                 return callback(error);
@@ -69,10 +55,10 @@ module.exports = {
             }
         });
     },
-    // delete camera by id
-    deleteCameraById: (id, callback) => {
+    // delete alert by id
+    deleteAlertById: (id, callback) => {
         // sql query
-        pool.query(`DELETE FROM camera_list WHERE camera_id = ?`, [id], (error, results, fields) => {
+        pool.query(`DELETE FROM alerts_list WHERE alert_id = ?`, [id], (error, results, fields) => {
             if (error) {
                 // error handling
                 return callback(error);
@@ -82,4 +68,4 @@ module.exports = {
             }
         });
     }
-}
+};
